@@ -16,7 +16,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final double _radius = 80;
   bool _avanca = false;
 
-  GlobalKey buttonKey = GlobalKey();
+  final buttonKey = GlobalKey();
+  Offset position = const Offset(0, 0);
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  // }
+
+  ///set a posicação inicial para o animated container
+  void getButtonPosition() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final RenderBox? box =
+          buttonKey.currentContext!.findRenderObject() as RenderBox?;
+
+      Offset? positionLocal = box?.localToGlobal(Offset.zero);
+
+      if (positionLocal != null) {
+        setState(() {
+          position = Offset(positionLocal.dx, positionLocal.dy);
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               decorationThickness: 1,
                             ),
                           ),
-                          /*Botao(
+                          Botao(
                             label: 'Entrar',
                             isLoading: isLoading,
                             key: buttonKey,
@@ -113,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             aprovado: _avanca,
                             height: mediaQuery.height,
                             width: mediaQuery.width,
-                          )*/
+                          )
                         ],
                       ),
                     ),
@@ -146,19 +169,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              // Positioned(
-              //   child: Align(
-              //     alignment: Alignment.centerRight,
-              //     child: AnimatedContainer(
-              //       duration: const Duration(seconds: 2),
-              //       width: _avanca == false ? 0 : mediaQuery.width,
-              //       height: _avanca == false ? 0 : mediaQuery.height,
-              //       curve: Curves.ease,
-              //       color: Colors.yellow,
-              //     ),
-              //   ),
-              // ),
-              Align(
+              Positioned(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: AnimatedContainer(
+                    duration: const Duration(seconds: 2),
+                    width: _avanca == false ? 0 : mediaQuery.width,
+                    height: _avanca == false ? 0 : mediaQuery.height,
+                    curve: Curves.ease,
+                    color: Colors.yellow,
+                  ),
+                ),
+              ),
+              /*Align(
                 alignment: const Alignment(.69, 0.17),
                 child: Botao(
                   label: 'Entrar',
@@ -178,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: mediaQuery.height,
                   width: mediaQuery.width,
                 ),
-              )
+              )*/
             ],
           ),
         ),
