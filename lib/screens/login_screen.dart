@@ -19,11 +19,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final buttonKey = GlobalKey();
   Offset position = const Offset(0, 0);
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        final RenderBox? box =
+            buttonKey.currentContext!.findRenderObject() as RenderBox?;
+
+        Offset? positionLocal = box?.localToGlobal(Offset.zero);
+
+        if (positionLocal != null) {
+          var meioWidth = box!.size.width / 2;
+          var meioHeight = box.size.height / 2;
+
+          setState(() {
+            position = Offset(
+                positionLocal.dx + meioWidth, positionLocal.dy + meioHeight);
+          });
+        }
+      },
+    );
+  }
 
   ///set a posicação inicial para o animated container
   void getButtonPosition() {
@@ -34,8 +53,12 @@ class _LoginScreenState extends State<LoginScreen> {
       Offset? positionLocal = box?.localToGlobal(Offset.zero);
 
       if (positionLocal != null) {
+        var meioWidth = box!.size.width / 2;
+        var meioHeight = box.size.height / 2;
+
         setState(() {
-          position = Offset(positionLocal.dx, positionLocal.dy);
+          position = Offset(
+              positionLocal.dx + meioWidth, positionLocal.dy + meioHeight);
         });
       }
     });
@@ -124,9 +147,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             isLoading: isLoading,
                             key: buttonKey,
                             onTap: () async {
+                              // getButtonPosition();
                               setState(() {
                                 isLoading = !isLoading;
                               });
+                              getButtonPosition();
                               await Future.delayed(const Duration(seconds: 3));
                               setState(() {
                                 isLoading = false;
@@ -169,18 +194,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              Positioned(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: AnimatedContainer(
-                    duration: const Duration(seconds: 2),
-                    width: _avanca == false ? 0 : mediaQuery.width,
-                    height: _avanca == false ? 0 : mediaQuery.height,
-                    curve: Curves.ease,
-                    color: Colors.yellow,
-                  ),
+              AnimatedPositioned(
+                left: isLoading ? position.dx : 0,
+                top: isLoading ? position.dy : 0,
+                curve: Curves.easeIn,
+                // height: _avanca ? mediaQuery.height : 0,
+                // width: _avanca ? mediaQuery.width : 0,
+                duration: const Duration(milliseconds: 500),
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeIn,
+                  color: Colors.blue,
+                  height: _avanca ? mediaQuery.height : 20,
+                  width: _avanca ? mediaQuery.width : 20,
                 ),
               ),
+
               /*Align(
                 alignment: const Alignment(.69, 0.17),
                 child: Botao(

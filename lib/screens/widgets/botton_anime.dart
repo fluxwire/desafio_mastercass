@@ -27,12 +27,8 @@ class Botao extends StatelessWidget {
         onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(seconds: 2),
-          curve: aprovado == false ? Curves.bounceIn : Curves.easeIn,
-          width: aprovado == false
-              ? isLoading
-                  ? _larguraLoading
-                  : _larguraBotao
-              : width,
+          curve: Curves.bounceIn,
+          width: isLoading ? _larguraLoading : _larguraBotao,
           height: aprovado == false ? 50 : height,
           decoration: BoxDecoration(
             color: Colors.red,
