@@ -21,27 +21,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        final RenderBox? box =
-            buttonKey.currentContext!.findRenderObject() as RenderBox?;
-
-        Offset? positionLocal = box?.localToGlobal(Offset.zero);
-
-        if (positionLocal != null) {
-          var meioWidth = box!.size.width / 2;
-          var meioHeight = box.size.height / 2;
-
-          setState(() {
-            position = Offset(
-                positionLocal.dx + meioWidth, positionLocal.dy + meioHeight);
-          });
-        }
-      },
-    );
+    getButtonPosition();
   }
 
   ///set a posicação inicial para o animated container
@@ -104,28 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    /*Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Botao(
-                            label: 'Entrar',
-                            isLoading: isLoading,
-                            onTap: () async {
-                              setState(() {
-                                isLoading = !isLoading;
-                              });
-                              await Future.delayed(const Duration(seconds: 3));
-                              setState(() {
-                                isLoading = false;
-                                _avanca = !_avanca;
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),*/
-
                     Container(
                       width: mediaQuery.width * 0.8,
                       height: 40,
@@ -209,28 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: _avanca ? mediaQuery.width : 20,
                 ),
               ),
-
-              /*Align(
-                alignment: const Alignment(.69, 0.17),
-                child: Botao(
-                  label: 'Entrar',
-                  isLoading: isLoading,
-                  key: buttonKey,
-                  onTap: () async {
-                    setState(() {
-                      isLoading = !isLoading;
-                    });
-                    await Future.delayed(const Duration(seconds: 5));
-                    setState(() {
-                      isLoading = false;
-                      _avanca = !_avanca;
-                    });
-                  },
-                  aprovado: _avanca,
-                  height: mediaQuery.height,
-                  width: mediaQuery.width,
-                ),
-              )*/
             ],
           ),
         ),
