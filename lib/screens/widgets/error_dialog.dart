@@ -31,12 +31,6 @@ class ErrorDialog extends StatelessWidget {
                   const Text('Erro no login'),
                   GestureDetector(
                     onTap: onTap,
-                    //TODO: PASSAR FUNCÃO COMO PARÂMETRO
-                    // onTap: () {
-                    //   setState(() {
-                    //     isError = !isError;
-                    //   });
-                    // },
                     child: const Icon(
                       Icons.close,
                       size: 40.0,

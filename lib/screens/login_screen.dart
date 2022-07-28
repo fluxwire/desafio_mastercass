@@ -51,30 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  ///Mostra mensagem snackbar erro login
-  void errorLogin() {
-    final snackBar = SnackBar(
-      backgroundColor: Color(0xFFB3261E),
-      duration: const Duration(seconds: 1),
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const <Widget>[
-          Text('Erro no login'),
-          SizedBox(width: 200),
-          Icon(
-            Icons.close,
-            color: Colors.white,
-          ),
-        ],
-      ),
-      behavior: SnackBarBehavior.floating,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20))),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
