@@ -1,5 +1,6 @@
 import 'package:desafio/screens/widgets/botton_anime.dart';
 import 'package:desafio/screens/widgets/button_login_redeSocial.dart';
+import 'package:desafio/screens/widgets/error_dialog.dart';
 import 'package:desafio/screens/widgets/logo.dart';
 import 'package:desafio/utils/color_schemes.dart';
 import 'package:flutter/material.dart';
@@ -15,33 +16,20 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   final double _radius = 80;
   bool _avanca = false;
+  bool alinhado = false;
+  bool isError = false;
 
   final buttonKey = GlobalKey();
+  final aninamatedKey = GlobalKey();
   Offset position = const Offset(0, 0);
+
+  String login = '';
+  String senha = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        final RenderBox? box =
-            buttonKey.currentContext!.findRenderObject() as RenderBox?;
-
-        Offset? positionLocal = box?.localToGlobal(Offset.zero);
-
-        if (positionLocal != null) {
-          var meioWidth = box!.size.width / 2;
-          var meioHeight = box.size.height / 2;
-
-          setState(() {
-            position = Offset(
-                positionLocal.dx + meioWidth, positionLocal.dy + meioHeight);
-          });
-        }
-      },
-    );
   }
 
   ///set a posicação inicial para o animated container
@@ -54,11 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (positionLocal != null) {
         var meioWidth = box!.size.width / 2;
-        var meioHeight = box.size.height / 2;
 
         setState(() {
-          position = Offset(
-              positionLocal.dx + meioWidth, positionLocal.dy + meioHeight);
+          position = Offset(positionLocal.dx + meioWidth, positionLocal.dy);
+          alinhado = true;
         });
       }
     });
@@ -71,9 +58,9 @@ class _LoginScreenState extends State<LoginScreen> {
       duration: const Duration(seconds: 1),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          const Text('Erro no login'),
-          const SizedBox(width: 200),
+        children: const <Widget>[
+          Text('Erro no login'),
+          SizedBox(width: 200),
           Icon(
             Icons.close,
             color: Colors.white,
@@ -109,8 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: mediaQuery.width * 0.8,
                       height: 40,
                       constraints: const BoxConstraints(maxWidth: 500),
-                      child: const TextField(
-                        decoration: InputDecoration(
+                      child: TextField(
+                        onChanged: ((value) => login = value),
+                        decoration: const InputDecoration(
                           label: Text(
                             'Email',
                             style: TextStyle(
@@ -130,8 +118,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: mediaQuery.width * 0.8,
                       height: 40,
                       constraints: const BoxConstraints(maxWidth: 500),
-                      child: const TextField(
-                        decoration: InputDecoration(
+                      child: TextField(
+                        onChanged: ((value) => senha = value),
+                        decoration: const InputDecoration(
                           label: Text(
                             'Senha',
                             style: TextStyle(
@@ -168,7 +157,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             isLoading: isLoading,
                             key: buttonKey,
                             onTap: () async {
-                              errorLogin();
+                              // errorLogin();
+                              setState(() {
+                                isError = false;
+                                _avanca = false;
+                              });
+
                               await Future.delayed(const Duration(seconds: 1));
 
                               setState(() {
@@ -176,9 +170,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                               getButtonPosition();
                               await Future.delayed(const Duration(seconds: 3));
+
                               setState(() {
                                 isLoading = false;
-                                _avanca = !_avanca;
+                                if (login == 'email@email.com.br' &&
+                                    senha == '123') {
+                                  _avanca = true;
+                                } else {
+                                  isError = true;
+                                  _avanca = false;
+                                }
                               });
                             },
                             aprovado: _avanca,
@@ -227,16 +228,38 @@ class _LoginScreenState extends State<LoginScreen> {
                 duration: const Duration(milliseconds: 500),
                 child: GestureDetector(
                   onTap: () {
-                    print('clicou tela cheia');
+                    setState(() {
+                      _avanca = false;
+                      isError = false;
+                    });
                   },
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.easeIn,
-                    color: Color(0xFF6750A4),
-                    height: _avanca ? mediaQuery.height : 0,
-                    width: _avanca ? mediaQuery.width : 0,
+                  child: AnimatedOpacity(
+                    opacity: _avanca ? 1 : 0,
+                    duration: const Duration(microseconds: 100),
+                    child: AnimatedContainer(
+                      key: aninamatedKey,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeIn,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF6750A4), //Color(0xFF6750A4),
+                        borderRadius:
+                            BorderRadius.circular(_avanca == false ? 40 : 0),
+                      ),
+                      // color: Colors.blue, // Color(0xFF6750A4),
+                      height: _avanca ? mediaQuery.height : 40,
+                      width: _avanca ? mediaQuery.width : 50,
+                    ),
                   ),
                 ),
+              ),
+              ErrorDialog(
+                isError: isError,
+                mediaQuery: mediaQuery,
+                onTap: () {
+                  setState(() {
+                    isError = !isError;
+                  });
+                },
               ),
             ],
           ),

@@ -24,28 +24,29 @@ class Botao extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(seconds: 2),
-          curve: Curves.bounceIn,
-          width: isLoading ? _larguraLoading : _larguraBotao,
-          height: aprovado == false ? 50 : height,
-          decoration: BoxDecoration(
-            color: Color(0xFF6750A4),
-            borderRadius: BorderRadius.circular(aprovado == false ? 40 : 0),
-          ),
-          alignment: Alignment.center,
-          child: aprovado == false
-              ? isLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : Center(
-                      child: Text(
-                      label,
-                      style: const TextStyle(fontSize: 16, color: Colors.white),
-                    ))
-              : Container(),
-        ));
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(seconds: 2),
+        curve: Curves.easeIn,
+        width: isLoading ? _larguraLoading : _larguraBotao,
+        height: aprovado == false ? 50 : height,
+        decoration: BoxDecoration(
+          color: const Color(0xFF6750A4),
+          borderRadius: BorderRadius.circular(aprovado == false ? 40 : 0),
+        ),
+        alignment: Alignment.center,
+        child: aprovado == false
+            ? isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : Center(
+                    child: Text(
+                    label,
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                  ))
+            : Container(),
+      ),
+    );
   }
 }

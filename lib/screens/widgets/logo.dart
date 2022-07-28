@@ -9,7 +9,11 @@ class Logo extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context).size;
     return Container(
       constraints: const BoxConstraints(
-          maxWidth: 300, maxHeight: 150, minHeight: 75, minWidth: 150),
+        maxWidth: 300,
+        maxHeight: 150,
+        minHeight: 75,
+        minWidth: 150,
+      ),
       height: 100,
       width: mediaQuery.width * 0.5,
       decoration: const BoxDecoration(

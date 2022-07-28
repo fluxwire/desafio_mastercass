@@ -10,7 +10,7 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedPositioned(
-      bottom: isError ? -60 : 20,
+      bottom: isError ? 20 : -60,
       duration: const Duration(milliseconds: 500),
       child: SizedBox(
         height: 50,
